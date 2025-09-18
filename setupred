@@ -118,7 +118,7 @@ fi
 curl -sSL https://raw.githubusercontent.com/redautomations/SetupRed/main/SetupRed -o SetupRed
 if [ $? -eq 0 ]; then
     echo "[ OK ] - Script principal descargado"
-    chmod +x RedAutomationsSetup
+    chmod +x SetupRed
     ./SetupRed_
 else
     echo "[ FAIL ] - No se pudo descargar el script principal"
