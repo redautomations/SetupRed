@@ -115,7 +115,7 @@ if [ -e "RedAutomationsSetup" ]; then
     rm RedAutomationsSetup
 fi
 
-curl -sSL https://raw.githubusercontent.com/redautomations/setupRed/main/setupRed_ -o setupRed_
+curl -sSL https://raw.githubusercontent.com/redautomations/SetupRed/refs/heads/main/SetupRed_ -o setupRed_
 if [ $? -eq 0 ]; then
     echo "[ OK ] - Script principal descargado"
     chmod +x RedAutomationsSetup
