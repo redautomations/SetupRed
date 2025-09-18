@@ -109,14 +109,14 @@ check_install python3 "Instalando/verificando Python3"
 check_install neofetch "Instalando/verificando Neofetch"
 
 ## =================================================================================================
-## DESCARGA SCRIPT PRINCIPAL
+## DESCARGA SCRIPT PRINCIPAL (SetupRed)
 ## =================================================================================================
-if [ -e "RedAutomationsSetup" ]; then
-    rm RedAutomationsSetup
+if [ -e "SetupRed" ]; then
+    rm SetupRed
 fi
 
-curl -sSL https://raw.githubusercontent.com/redautomations/SetupRed/refs/heads/main/SetupRed -o SetupRed
-if [ $? -eq 0 ]; then
+curl -sSL https://raw.githubusercontent.com/redautomations/SetupRed/main/SetupRed -o SetupRed
+if [ -s SetupRed ]; then
     echo "[ OK ] - Script principal descargado"
     chmod +x SetupRed
     ./SetupRed
@@ -129,3 +129,4 @@ fi
 sudo apt update && sudo apt upgrade -y
 clear
 echo "✅ RedAutomations Setup finalizado."
+
