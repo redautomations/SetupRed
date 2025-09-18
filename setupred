@@ -1,0 +1,131 @@
+#!/bin/bash
+
+## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ##
+##                                     REDAUTOMATIONS SETUP                                    ##
+## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ## // ##
+
+## Colores
+amarelo="\e[33m"
+verde="\e[32m"
+branco="\e[97m"
+bege="\e[93m"
+vermelho="\e[91m"
+reset="\e[0m"
+
+sudo apt update
+sudo apt upgrade -y
+
+## =================================================================================================
+## FUNCIONES DE BANNER (ASCII ART SE DEJA COMO EN EL ORIGINAL)
+## =================================================================================================
+
+nome_aviso(){
+clear
+echo ""
+echo -e "$amarelo===================================================================================================$reset"
+echo -e "$amarelo=                                                                                                 $amarelo=$reset"
+# --------------- ASCII ORIGINAL (NO TOCAR) -----------------
+echo -e "$branco   █████╗     ██╗   ██╗    ██╗    ███████╗     ██████╗   $amarelo=$reset"
+echo -e "$branco  ██╔══██╗    ██║   ██║    ██║    ██╔════╝    ██╔═══██╗  $amarelo=$reset"
+echo -e "$branco  ███████║    ██║   ██║    ██║    ███████╗    ██║   ██║  $amarelo=$reset"
+echo -e "$branco  ██╔══██║    ╚██╗ ██╔╝    ██║    ╚════██║    ██║   ██║  $amarelo=$reset"
+echo -e "$branco  ██║  ██║     ╚████╔╝     ██║    ███████║    ╚██████╔╝  $amarelo=$reset"
+echo -e "$branco  ╚═╝  ╚═╝      ╚═══╝      ╚═╝    ╚══════╝     ╚═════╝   $amarelo=$reset"
+# ------------------------------------------------------------
+echo -e "$amarelo=                                                                                                 $amarelo=$reset"
+echo -e "$amarelo===================================================================================================$reset"
+echo ""
+echo ""
+}
+
+nome_iniciando(){
+clear
+echo ""
+echo -e "$amarelo===================================================================================================$reset"
+echo -e "$amarelo=                                                                                                 $amarelo=$reset"
+# --------------- ASCII ORIGINAL (NO TOCAR) -----------------
+echo -e "$branco  ██╗███╗   ██╗██╗ ██████╗██╗ █████╗ ███╗   ██╗██████╗  ██████╗   $amarelo=$reset"
+echo -e "$branco  ██║████╗  ██║██║██╔════╝██║██╔══██╗████╗  ██║██╔══██╗██╔═══██╗  $amarelo=$reset"
+echo -e "$branco  ██║██╔██╗ ██║██║██║     ██║███████║██╔██╗ ██║██║  ██║██║   ██║  $amarelo=$reset"
+echo -e "$branco  ██║██║╚██╗██║██║██║     ██║██╔══██║██║╚██╗██║██║  ██║██║   ██║  $amarelo=$reset"
+echo -e "$branco  ██║██║ ╚████║██║╚██████╗██║██║  ██║██║ ╚████║██████╔╝╚██████╔╝  $amarelo=$reset"
+echo -e "$branco  ╚═╝╚═╝  ╚═══╝╚═╝ ╚═════╝╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝  ╚═════╝   $amarelo=$reset"
+# ------------------------------------------------------------
+echo -e "$amarelo=                                              v. 1.0.0                                           $amarelo=$reset"
+echo -e "$amarelo===================================================================================================$reset"
+echo ""
+echo ""
+}
+
+## =================================================================================================
+## VERIFICACIONES
+## =================================================================================================
+clear
+nome_aviso
+echo "🔎 Verificando requisitos..."
+sleep 1
+
+# Verifica sistema
+if ! grep -q 'PRETTY_NAME="Debian GNU/Linux 11' /etc/os-release; then
+    echo "⚠️ Este script está optimizado para Debian 11."
+    sleep 3
+fi
+
+# Verifica root
+if [ "$(id -u)" -ne 0 ]; then
+    echo "❌ Este script debe ejecutarse como root."
+    exit 1
+fi
+
+# Ajusta directorio
+if [ "$PWD" != "/root" ]; then
+    echo "📂 Moviendo a /root/"
+    cd /root || exit
+fi
+
+## =================================================================================================
+## INSTALACIONES
+## =================================================================================================
+nome_iniciando
+
+check_install () {
+    pkg=$1
+    desc=$2
+    apt install -y $pkg > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        echo "[ OK ] - $desc"
+    else
+        echo "[ FAIL ] - $desc"
+    fi
+}
+
+check_install sudo "Instalando/verificando sudo"
+check_install apt-utils "Instalando/verificando apt-utils"
+check_install dialog "Instalando/verificando dialog"
+check_install jq "Instalando/verificando jq"
+check_install apache2-utils "Instalando/verificando apache2-utils"
+check_install git "Instalando/verificando Git"
+check_install python3 "Instalando/verificando Python3"
+check_install neofetch "Instalando/verificando Neofetch"
+
+## =================================================================================================
+## DESCARGA SCRIPT PRINCIPAL
+## =================================================================================================
+if [ -e "RedAutomationsSetup" ]; then
+    rm RedAutomationsSetup
+fi
+
+curl -sSL https://raw.githubusercontent.com/redautomations/setup/main/RedAutomationsSetup -o RedAutomationsSetup
+if [ $? -eq 0 ]; then
+    echo "[ OK ] - Script principal descargado"
+    chmod +x RedAutomationsSetup
+    ./RedAutomationsSetup
+else
+    echo "[ FAIL ] - No se pudo descargar el script principal"
+    echo "Encerrando setup..."
+    sleep 3
+fi
+
+sudo apt update && sudo apt upgrade -y
+clear
+echo "✅ RedAutomations Setup finalizado."
